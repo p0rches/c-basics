@@ -13,6 +13,8 @@ int main()
   step = 20;
 
   fahr = lower;
+  
+  printf("%3s \t %6s \n","Fahr","Celsius");
 
   while (fahr <= upper)
   {
