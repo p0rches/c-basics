@@ -1,27 +1,25 @@
 #include <stdio.h>
 
 int main() {
-  int c, nl, tab, blank;
+  int current_char, previous_char;
 
-  nl = 0;
-  while ((c = getchar()) != EOF) {
-    if (c == '\n') {
-      ++nl;
-    };
-    if (c == ' ') {
-      ++blank;
-    };
-    if (c == '\t') {
-      ++tab;
-    };
-  };
+  // Read the first character
+  current_char = getchar();
 
-  printf("Newlines: ");
-  printf("%d\n", nl);
+  while (current_char != EOF) {
+    // Print the character if it's not a space or if it's the first space in a
+    // consecutive series
+    if (current_char != ' ' || previous_char != ' ') {
+      putchar(current_char);
+    }
 
-  printf("Tabs: ");
-  printf("%d\n", nl);
+    // Store the current character as the previous character for the next
+    // iteration
+    previous_char = current_char;
 
-  printf("Blanks: ");
-  printf("%d\n", nl);
+    // Read the next character
+    current_char = getchar();
+  }
+
+  return 0;
 }
