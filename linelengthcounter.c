@@ -1,47 +1,69 @@
 #include <stdio.h>
-#define MAXLINE 100
+#include <stdlib.h>
 
-int my_getline(char line[], int maxline);
-void copy(char to[], char from[]);
+int my_getline(char **line);
+void copy(char **to, char **from);
 
 int main() {
   int len;
-  int max;
-  char line[MAXLINE];
-  char longest[MAXLINE];
+  int max = 0;
+  char *line = NULL;
+  char *longest = NULL;
 
-  max = 0;
-  while ((len = my_getline(line, MAXLINE)) > 0)
+  while ((len = my_getline(&line)) > 0)
     if (len > max) {
       max = len;
-      copy(longest, line);
+      copy(&longest, &line);
     }
 
   if (max > 0)
     printf("%s", longest);
 
+  free(line);
+  free(longest);
+
   return 0;
 }
 
-int my_getline(char s[], int lim) {
+int my_getline(char **s) {
   int c, i;
+  int lim = 2;
 
-  for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
-    s[i] = c;
+  *s = (char *)malloc(lim * sizeof(char));
+
+  if (!(*s)) {
+    fprintf(stderr, "Memory Allocation Error\n");
+    exit(EXIT_FAILURE);
+  }
+
+  for (i = 0; (c = getchar()) != EOF && c != '\n'; ++i) {
+    if (i >= lim - 1) {
+      lim *= 2;
+      *s = (char *)realloc(*s, lim * sizeof(char));
+
+      if (!(*s)) {
+        fprintf(stderr, "Memory Allocation Error\n");
+        exit(EXIT_FAILURE);
+      }
+    }
+    (*s)[i] = c;
+  }
 
   if (c == '\n') {
-    s[i] = c;
+    (*s)[i] = c;
     ++i;
   }
 
-  s[i] = '\0';
+  (*s)[i] = '\0';
   return i;
 }
 
-void copy(char to[], char from[]) {
-  int i;
+void copy(char **to, char **from) {
+  int i = 0;
 
-  i = 0;
-  while ((to[i] = from[i]) != '\0')
+  while ((*from)[i] != '\0') {
+    (*to)[i] = (*from)[i];
     ++i;
+  }
+  (*to)[i] = '\0';
 }
