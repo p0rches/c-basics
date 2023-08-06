@@ -63,7 +63,7 @@ int my_getline(char **s) {
   return i;
 }
 
-void copy(char **to, char *from) { // Change parameter from char** to char*
+void copy(char **to, char *from) {
   int i = 0;
 
   while (from[i] != '\0') {
