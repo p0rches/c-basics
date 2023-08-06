@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int my_getline(char **line);
-void copy(char **to, char **from);
+void copy(char **to, char *from); // Change parameter from char** to char*
 
 int main() {
   int len;
@@ -13,7 +13,12 @@ int main() {
   while ((len = my_getline(&line)) > 0)
     if (len > max) {
       max = len;
-      copy(&longest, &line);
+      if (longest) {
+        free(longest); // Free previously allocated memory
+      }
+      longest =
+          (char *)malloc(len * sizeof(char)); // Allocate memory for longest
+      copy(&longest, line); // Pass the line directly (not a reference to it)
     }
 
   if (max > 0)
@@ -58,11 +63,11 @@ int my_getline(char **s) {
   return i;
 }
 
-void copy(char **to, char **from) {
+void copy(char **to, char *from) { // Change parameter from char** to char*
   int i = 0;
 
-  while ((*from)[i] != '\0') {
-    (*to)[i] = (*from)[i];
+  while (from[i] != '\0') {
+    (*to)[i] = from[i];
     ++i;
   }
   (*to)[i] = '\0';
