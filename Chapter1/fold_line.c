@@ -23,6 +23,7 @@ int main(void) {
   return 0;
 }
 
+// gets the current line, if newline char found, returns
 int get_line(char line[], int max_line_len) {
   int c, i = 0;
 
@@ -39,6 +40,7 @@ int get_line(char line[], int max_line_len) {
   return i;
 }
 
+// folds lines longer than a breaking point
 void fold_line(char line[], char fold_str[], int n_break) {
   int i, j;
   int column = 0;
