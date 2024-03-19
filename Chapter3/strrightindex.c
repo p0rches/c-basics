@@ -1,22 +1,25 @@
 #include <stdio.h>
-#define MAX 1000 /* maximum input length */
+#include <string.h>
+
+#define MAXLEN 1000
 
 int get_line(char line[], int max);
-int strindex(char source[], char search[]);
+int strrindex(char source[], char search[]);
 
-char pattern[] = "ould"; /* search string */
+char pattern[] = "ould";
 
-/* find all lines matching pattern */
-int main() {
-  char line[MAX];
+int main(int argc, char *argv[]) {
+  char line[MAXLEN];
   int found = 0;
 
-  while (get_line(line, MAX) > 0) {
-    if (strindex(line, pattern) >= 0) {
+  while (get_line(line, MAXLEN) > 0) {
+    if (strrindex(line, pattern)) {
+      found = strrindex(line, pattern);
       printf("%s", line);
-      found++;
+      printf("%d\n", found);
     }
   }
+
   return found;
 }
 
@@ -35,11 +38,11 @@ int get_line(char s[], int lim) {
   return i;
 }
 
-/* strindex: return index of t in s, -1 if none */
-int strindex(char s[], char t[]) {
+/* strrindex: return the index of the rightmost occurence of the search */
+int strrindex(char s[], char t[]) {
   int i, j, k;
 
-  for (i = 0; s[i] != '\0'; i++) {
+  for (i = strlen(s) - 1; s[i] != '\0'; i--) {
     for (j = i, k = 0; t[k] != '\0' && s[j] == t[k]; j++, k++)
       ;
     if (k > 0 && t[k] == '\0') {
