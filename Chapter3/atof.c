@@ -31,9 +31,9 @@ int get_line(char s[], int lim) {
 
 double atof(char s[]) {
   double val, power;
-  int i, sign;
+  int i, sign, exp_sign = 1, exp_pwr = 0;
 
-  for (i = 0; isspace(s[i]); i++)
+  for (i = 0; isspace(s[i]); i++) /* skips any blanks at the start */
     ;
   sign = (s[i] == '-') ? -1 : 1;
   if (s[i] == '+' || s[i] == '-') {
@@ -48,6 +48,24 @@ double atof(char s[]) {
   for (power = 1.0; isdigit(s[i]); i++) {
     val = 10.0 * val + (s[i] - '0');
     power *= 10.0;
+  }
+  if (s[i] == 'e' || s[i] == 'E') {
+    if (s[++i] == '-') {
+      exp_sign = -1;
+      i++;
+    }
+    while (isdigit(s[i])) {
+      exp_pwr = 10 * exp_pwr + (s[i] - '0');
+      i++;
+    }
+  }
+  while (exp_pwr) {
+    if (exp_sign == -1) {
+      power *= 10;
+    } else {
+      power /= 10;
+    }
+    --exp_pwr;
   }
   return sign * val / power;
 }
