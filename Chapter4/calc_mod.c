@@ -8,8 +8,13 @@
 #define NUMBER '0'
 
 int getop(char[]);
-void push(double);
+
+void push(double f);
 double pop(void);
+void view_head(void);
+void duplicate(void);
+void swap(void);
+void clear(void);
 
 int main(void) {
   int type;
@@ -56,6 +61,22 @@ int main(void) {
       }
       break;
 
+    case 'h':
+      view_head();
+      break;
+
+    case 'd':
+      duplicate();
+      break;
+
+    case 's':
+      swap();
+      break;
+
+    case 'c':
+      clear();
+      break;
+
     case '\n':
       printf("result: %.8g\n", pop());
       break;
@@ -70,22 +91,51 @@ int main(void) {
 }
 
 int sp = 0;
-double val[MAXVAL];
+double stack[MAXVAL];
 
 void push(double f) {
   if (sp < MAXVAL) {
-    val[sp++] = f;
+    stack[sp++] = f;
   } else {
-    printf("Error: stack full, can't push %g.\n", f);
+    printf("Error: stack full.\n");
   }
 }
 
 double pop(void) {
   if (sp > 0) {
-    return val[--sp];
+    return stack[--sp];
   } else {
     printf("Error: stack empty.\n");
-    return 0.0;
+  }
+
+  return 0.0;
+}
+
+void view_head(void) {
+  if (sp) {
+    printf("stack_head: %g\n", stack[sp - 1]);
+  } else {
+    printf("Error: stack empty.\n");
+  }
+}
+
+void duplicate(void) {
+  double temp = pop();
+  push(temp);
+  push(temp);
+}
+
+void swap(void) {
+  double temp1 = pop();
+  double temp2 = pop();
+
+  push(temp1);
+  push(temp2);
+}
+
+void clear(void) {
+  while (sp > 0) {
+    stack[--sp] = 0.0;
   }
 }
 
@@ -125,8 +175,6 @@ int getop(char s[]) {
     {
       s[++i] = c = next;
     }
-  } else {
-    c = getch();
   }
 
   if (isdigit(c)) {
@@ -145,8 +193,3 @@ int getop(char s[]) {
 
   return NUMBER;
 }
-
-// NOTE: The getch() function check if there are characters in a buffer. If
-// there are characters the function will return the last character from the
-// buffer, else getchar() function is called. The ungetch() function will push
-// the last character in the buffer.
